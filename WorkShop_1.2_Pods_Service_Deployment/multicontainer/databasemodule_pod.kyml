@@ -12,7 +12,7 @@ metadata: {
     },
   },
 spec: {
-  containers: {
+  containers: {[
       name: "maindb",
       image: "labdocker/mariadb:latest",
       ports: [{
@@ -23,6 +23,6 @@ spec: {
           name: "MYSQL_ROOT_PASSWORD",
           value: "password"
       }],
-    },
+   ]},
   },
 }
