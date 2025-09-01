@@ -32,6 +32,10 @@ spec:
       containers:
         - name: webtest
           image: labdocker/cluster:webservicelite_v1.51rc
+          lifecycle:
+            preStop:
+              sleep:
+                seconds: 0
           ports:
           - containerPort: 5000
             protocol: TCP
@@ -42,5 +46,3 @@ spec:
                 - /usr/src/app/main.py
             initialDelaySeconds: 15
             periodSeconds: 5
-      imagePullSecrets:
-        - name: secpullhubdocker

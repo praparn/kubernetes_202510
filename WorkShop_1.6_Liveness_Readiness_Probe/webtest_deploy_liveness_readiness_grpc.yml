@@ -30,6 +30,10 @@ spec:
       containers:
         - name: webtest
           image: registry.k8s.io/etcd:3.5.1-0
+          lifecycle:
+            preStop:
+              sleep:
+                seconds: 0
           command: [ "/usr/local/bin/etcd", "--data-dir",  "/var/lib/etcd", "--listen-client-urls", "http://0.0.0.0:2379", "--advertise-client-urls", "http://127.0.0.1:2379", "--log-level", "debug"]
           ports:
           - containerPort: 2379
@@ -50,5 +54,3 @@ spec:
             successThreshold: 1
             failureThreshold: 10
             periodSeconds: 30
-      imagePullSecrets:
-        - name: secpullhubdocker

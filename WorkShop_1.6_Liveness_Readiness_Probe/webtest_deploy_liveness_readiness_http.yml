@@ -30,6 +30,10 @@ spec:
       containers:
         - name: webtest
           image: labdocker/cluster:webservicelite_v1
+          lifecycle:
+            preStop:
+              sleep:
+                seconds: 0
           ports:
           - name: webservice
             containerPort: 5000
@@ -78,5 +82,3 @@ spec:
             timeoutSeconds: 30
             successThreshold: 1
             failureThreshold: 10
-      imagePullSecrets:
-        - name: secpullhubdocker
