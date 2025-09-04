@@ -22,5 +22,3 @@ spec:
             - name: job-parallel-cron
               image: labdocker/redis:worker-test
           restartPolicy: Never
-          imagePullSecrets:
-            - name: secpullhubdocker

@@ -55,5 +55,3 @@ spec:
         -
           name: "MYSQL_ROOT_PASSWORD"
           value: "password"
-    imagePullSecrets:
-      - name: secpullhubdocker

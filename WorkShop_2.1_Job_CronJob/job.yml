@@ -15,6 +15,7 @@ spec:
   backoffLimitPerIndex: 1  # maximal number of failures per index
   ttlSecondsAfterFinished: 30
   activeDeadlineSeconds: 60
+  podReplacementPolicy: Failed
   template:
     metadata:
       name: linenotify
@@ -36,5 +37,3 @@ spec:
         - name: TOKEN
           value: "pKCqcUWGmCpEoNBDNZxsnt5OT4kP41F2BK3QsdSdMDw"
       restartPolicy: Never #OnFailure
-      imagePullSecrets:
-        - name: secpullhubdocker

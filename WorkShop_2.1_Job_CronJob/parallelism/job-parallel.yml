@@ -8,6 +8,7 @@ spec:
   #completionMode: Indexed
   ttlSecondsAfterFinished: 300
   activeDeadlineSeconds: 600
+  podReplacementPolicy: Failed
   template:
     metadata:
       name: job-parallel
@@ -16,5 +17,3 @@ spec:
       - name: worker
         image: labdocker/redis:worker-test
       restartPolicy: OnFailure
-      imagePullSecrets:
-        - name: secpullhubdocker
