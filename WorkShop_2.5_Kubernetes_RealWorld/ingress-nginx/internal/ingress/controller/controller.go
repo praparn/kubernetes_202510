@@ -156,6 +156,13 @@ func getIngressPodZone(svc *apiv1.Service) string {
 			}
 		}
 	}
+	if svc.Spec.TrafficDistribution != nil && *svc.Spec.TrafficDistribution == apiv1.ServiceTrafficDistributionPreferClose {
+		if foundZone, ok := k8s.IngressNodeDetails.GetLabels()[apiv1.LabelTopologyZone]; ok {
+			klog.V(3).Infof("Svc has traffic distribution enabled, try to use zone %q where controller pod is running for Service %q ", foundZone, svcKey)
+			return foundZone
+		}
+	}
+
 	return emptyZone
 }
 
@@ -185,7 +192,18 @@ func (n *NGINXController) syncIngress(interface{}) error {
 	n.metricCollector.SetSSLExpireTime(servers)
 	n.metricCollector.SetSSLInfo(servers)
 
+	hash, err := hashstructure.Hash(pcfg, hashstructure.FormatV1, &hashstructure.HashOptions{
+		TagName: "json",
+	})
+	if err != nil {
+		klog.Errorf("unexpected error hashing configuration: %v", err)
+	}
+
 	if n.runningConfig.Equal(pcfg) {
+		if !n.lastConfigSuccess {
+			n.metricCollector.ConfigSuccess(hash, true)
+			n.lastConfigSuccess = true
+		}
 		klog.V(3).Infof("No configuration change detected, skipping backend reload")
 		return nil
 	}
@@ -195,19 +213,13 @@ func (n *NGINXController) syncIngress(interface{}) error {
 	if !utilingress.IsDynamicConfigurationEnough(pcfg, n.runningConfig) {
 		klog.InfoS("Configuration changes detected, backend reload required")
 
-		hash, err := hashstructure.Hash(pcfg, hashstructure.FormatV1, &hashstructure.HashOptions{
-			TagName: "json",
-		})
-		if err != nil {
-			klog.Errorf("unexpected error hashing configuration: %v", err)
-		}
-
 		pcfg.ConfigurationChecksum = fmt.Sprintf("%v", hash)
 
 		err = n.OnUpdate(*pcfg)
 		if err != nil {
 			n.metricCollector.IncReloadErrorCount()
 			n.metricCollector.ConfigSuccess(hash, false)
+			n.lastConfigSuccess = false
 			klog.Errorf("Unexpected failure reloading the backend:\n%v", err)
 			n.recorder.Eventf(k8s.IngressPodDetails, apiv1.EventTypeWarning, "RELOAD", fmt.Sprintf("Error reloading NGINX: %v", err))
 			return err
@@ -216,6 +228,7 @@ func (n *NGINXController) syncIngress(interface{}) error {
 		klog.InfoS("Backend successfully reloaded")
 		n.metricCollector.ConfigSuccess(hash, true)
 		n.metricCollector.IncReloadCount()
+		n.lastConfigSuccess = true
 
 		n.recorder.Eventf(k8s.IngressPodDetails, apiv1.EventTypeNormal, "RELOAD", "NGINX reload triggered due to a change in configuration")
 	}
@@ -236,7 +249,7 @@ func (n *NGINXController) syncIngress(interface{}) error {
 	}
 
 	retriesRemaining := retry.Steps
-	err := wait.ExponentialBackoff(retry, func() (bool, error) {
+	err = wait.ExponentialBackoff(retry, func() (bool, error) {
 		err := n.configureDynamically(pcfg)
 		if err == nil {
 			klog.V(2).Infof("Dynamic reconfiguration succeeded.")
@@ -420,11 +433,15 @@ func (n *NGINXController) CheckIngress(ing *networking.Ingress) error {
 		return err
 	}
 
+	/* Deactivated to mitigate CVE-2025-1974
+	// TODO: Implement sandboxing so this test can be done safely
 	err = n.testTemplate(content)
 	if err != nil {
 		n.metricCollector.IncCheckErrorCount(ing.ObjectMeta.Namespace, ing.Name)
 		return err
 	}
+	*/
+
 	n.metricCollector.IncCheckCount(ing.ObjectMeta.Namespace, ing.Name)
 	endCheck := time.Now().UnixNano() / 1000000
 	n.metricCollector.SetAdmissionMetrics(

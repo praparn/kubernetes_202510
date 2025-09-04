@@ -2,7 +2,7 @@
 
 [ingress-nginx](https://github.com/kubernetes/ingress-nginx) Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer
 
-![Version: 4.12.0](https://img.shields.io/badge/Version-4.12.0-informational?style=flat-square) ![AppVersion: 1.12.0](https://img.shields.io/badge/AppVersion-1.12.0-informational?style=flat-square)
+![Version: 4.13.2](https://img.shields.io/badge/Version-4.13.2-informational?style=flat-square) ![AppVersion: 1.13.2](https://img.shields.io/badge/AppVersion-1.13.2-informational?style=flat-square)
 
 To use, add `ingressClassName: nginx` spec field or the `kubernetes.io/ingress.class: nginx` annotation to your Ingress resources.
 
@@ -260,9 +260,12 @@ metadata:
 | controller.admissionWebhooks.certManager.rootCert.duration | string | `""` |  |
 | controller.admissionWebhooks.certManager.rootCert.revisionHistoryLimit | int | `0` | Revision history limit of the root certificate. Ref.: https://cert-manager.io/docs/reference/api-docs/#cert-manager.io/v1.CertificateSpec |
 | controller.admissionWebhooks.certificate | string | `"/usr/local/certificates/cert"` |  |
+| controller.admissionWebhooks.createSecretJob.activeDeadlineSeconds | int | `0` | Deadline in seconds for the job to complete. Must be greater than 0 to enforce. If unset or 0, no deadline is enforced. |
 | controller.admissionWebhooks.createSecretJob.name | string | `"create"` |  |
 | controller.admissionWebhooks.createSecretJob.resources | object | `{}` |  |
 | controller.admissionWebhooks.createSecretJob.securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsGroup":65532,"runAsNonRoot":true,"runAsUser":65532,"seccompProfile":{"type":"RuntimeDefault"}}` | Security context for secret creation containers |
+| controller.admissionWebhooks.createSecretJob.volumeMounts | list | `[]` | Volume mounts for secret creation containers |
+| controller.admissionWebhooks.createSecretJob.volumes | list | `[]` | Volumes for secret creation pod |
 | controller.admissionWebhooks.enabled | bool | `true` |  |
 | controller.admissionWebhooks.extraEnvs | list | `[]` | Additional environment variables to set |
 | controller.admissionWebhooks.failurePolicy | string | `"Fail"` | Admission Webhook failure policy to use |
@@ -272,10 +275,10 @@ metadata:
 | controller.admissionWebhooks.namespaceSelector | object | `{}` |  |
 | controller.admissionWebhooks.objectSelector | object | `{}` |  |
 | controller.admissionWebhooks.patch.enabled | bool | `true` |  |
-| controller.admissionWebhooks.patch.image.digest | string | `"sha256:0de05718b59dc33b57ddfb4d8ad5f637cefd13eafdec0e1579d782b3483c27c3"` |  |
+| controller.admissionWebhooks.patch.image.digest | string | `"sha256:050a34002d5bb4966849c880c56c91f5320372564245733b33d4b3461b4dbd24"` |  |
 | controller.admissionWebhooks.patch.image.image | string | `"ingress-nginx/kube-webhook-certgen"` |  |
 | controller.admissionWebhooks.patch.image.pullPolicy | string | `"IfNotPresent"` |  |
-| controller.admissionWebhooks.patch.image.tag | string | `"v1.5.1"` |  |
+| controller.admissionWebhooks.patch.image.tag | string | `"v1.6.2"` |  |
 | controller.admissionWebhooks.patch.labels | object | `{}` | Labels to be added to patch job resources |
 | controller.admissionWebhooks.patch.networkPolicy.enabled | bool | `false` | Enable 'networkPolicy' or not |
 | controller.admissionWebhooks.patch.nodeSelector."kubernetes.io/os" | string | `"linux"` |  |
@@ -283,15 +286,19 @@ metadata:
 | controller.admissionWebhooks.patch.priorityClassName | string | `""` | Provide a priority class name to the webhook patching job # |
 | controller.admissionWebhooks.patch.rbac | object | `{"create":true}` | Admission webhook patch job RBAC |
 | controller.admissionWebhooks.patch.rbac.create | bool | `true` | Create RBAC or not |
+| controller.admissionWebhooks.patch.runtimeClassName | string | `""` | Instruct the kubelet to use the named RuntimeClass to run the pod |
 | controller.admissionWebhooks.patch.securityContext | object | `{}` | Security context for secret creation & webhook patch pods |
 | controller.admissionWebhooks.patch.serviceAccount | object | `{"automountServiceAccountToken":true,"create":true,"name":""}` | Admission webhook patch job service account |
 | controller.admissionWebhooks.patch.serviceAccount.automountServiceAccountToken | bool | `true` | Auto-mount service account token or not |
 | controller.admissionWebhooks.patch.serviceAccount.create | bool | `true` | Create a service account or not |
 | controller.admissionWebhooks.patch.serviceAccount.name | string | `""` | Custom service account name |
 | controller.admissionWebhooks.patch.tolerations | list | `[]` |  |
+| controller.admissionWebhooks.patchWebhookJob.activeDeadlineSeconds | int | `0` | Deadline in seconds for the job to complete. Must be greater than 0 to enforce. If unset or 0, no deadline is enforced. |
 | controller.admissionWebhooks.patchWebhookJob.name | string | `"patch"` |  |
 | controller.admissionWebhooks.patchWebhookJob.resources | object | `{}` |  |
 | controller.admissionWebhooks.patchWebhookJob.securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsGroup":65532,"runAsNonRoot":true,"runAsUser":65532,"seccompProfile":{"type":"RuntimeDefault"}}` | Security context for webhook patch containers |
+| controller.admissionWebhooks.patchWebhookJob.volumeMounts | list | `[]` | Volume mounts for webhook patch containers |
+| controller.admissionWebhooks.patchWebhookJob.volumes | list | `[]` | Volumes for webhook patch pod |
 | controller.admissionWebhooks.port | int | `8443` |  |
 | controller.admissionWebhooks.service.annotations | object | `{}` |  |
 | controller.admissionWebhooks.service.externalIPs | list | `[]` |  |
@@ -342,8 +349,8 @@ metadata:
 | controller.hostname | object | `{}` | Optionally customize the pod hostname. |
 | controller.image.allowPrivilegeEscalation | bool | `false` |  |
 | controller.image.chroot | bool | `false` |  |
-| controller.image.digest | string | `"sha256:e6b8de175acda6ca913891f0f727bca4527e797d52688cbe9fec9040d6f6b6fa"` |  |
-| controller.image.digestChroot | string | `"sha256:87c88e1c38a6c8d4483c8f70b69e2cca49853bb3ec3124b9b1be648edf139af3"` |  |
+| controller.image.digest | string | `"sha256:1f7eaeb01933e719c8a9f4acd8181e555e582330c7d50f24484fb64d2ba9b2ef"` |  |
+| controller.image.digestChroot | string | `"sha256:2beb2139c53d6bcb9c8b11d68b412a6a1aa1de3a7e6040695848b0ce997b2be8"` |  |
 | controller.image.image | string | `"ingress-nginx/controller"` |  |
 | controller.image.pullPolicy | string | `"IfNotPresent"` |  |
 | controller.image.readOnlyRootFilesystem | bool | `false` |  |
@@ -351,7 +358,7 @@ metadata:
 | controller.image.runAsNonRoot | bool | `true` |  |
 | controller.image.runAsUser | int | `101` | This value must not be changed using the official image. uid=101(www-data) gid=82(www-data) groups=82(www-data) |
 | controller.image.seccompProfile.type | string | `"RuntimeDefault"` |  |
-| controller.image.tag | string | `"v1.12.0"` |  |
+| controller.image.tag | string | `"v1.13.2"` |  |
 | controller.ingressClass | string | `"nginx"` | For backwards compatibility with ingress.class annotation, use ingressClass. Algorithm is as follows, first ingressClassName is considered, if not present, controller looks for ingress.class annotation |
 | controller.ingressClassByName | bool | `false` | Process IngressClass per name (additionally as per spec.controller). |
 | controller.ingressClassResource | object | `{"aliases":[],"annotations":{},"controllerValue":"k8s.io/ingress-nginx","default":false,"enabled":true,"name":"nginx","parameters":{}}` | This section refers to the creation of the IngressClass resource. IngressClasses are immutable and cannot be changed after creation. We do not support namespaced IngressClasses, yet, so a ClusterRole and a ClusterRoleBinding is required. |
@@ -438,6 +445,7 @@ metadata:
 | controller.reportNodeInternalIp | bool | `false` | Bare-metal considerations via the host network https://kubernetes.github.io/ingress-nginx/deploy/baremetal/#via-the-host-network Ingress status was blank because there is no Service exposing the Ingress-Nginx Controller in a configuration using the host network, the default --publish-service flag used in standard cloud setups does not apply |
 | controller.resources.requests.cpu | string | `"100m"` |  |
 | controller.resources.requests.memory | string | `"90Mi"` |  |
+| controller.runtimeClassName | string | `""` | Instruct the kubelet to use the named RuntimeClass to run the pod |
 | controller.scope.enabled | bool | `false` | Enable 'scope' or not |
 | controller.scope.namespace | string | `""` | Namespace to limit the controller to; defaults to $(POD_NAMESPACE) |
 | controller.scope.namespaceSelector | string | `""` | When scope.enabled == false, instead of watching all namespaces, we watching namespaces whose labels only match with namespaceSelector. Format like foo=bar. Defaults to empty, means watching all namespaces. |
@@ -549,6 +557,7 @@ metadata:
 | defaultBackend.readinessProbe.timeoutSeconds | int | `5` |  |
 | defaultBackend.replicaCount | int | `1` |  |
 | defaultBackend.resources | object | `{}` |  |
+| defaultBackend.runtimeClassName | string | `""` | Instruct the kubelet to use the named RuntimeClass to run the pod |
 | defaultBackend.service.annotations | object | `{}` |  |
 | defaultBackend.service.clusterIPs | list | `[]` | Pre-defined cluster internal IP addresses of the default backend service. Take care of collisions with existing services. This value is immutable. Set once, it can not be changed without deleting and re-creating the service. Ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address |
 | defaultBackend.service.externalIPs | list | `[]` | List of IP addresses at which the default backend service is available # Ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips # |

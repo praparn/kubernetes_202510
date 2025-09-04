@@ -44,7 +44,7 @@ var (
 	alphaNumericChars    = `\-\.\_\~a-zA-Z0-9\/:`
 	extendedAlphaNumeric = alphaNumericChars + ", "
 	regexEnabledChars    = regexp.QuoteMeta(`^$[](){}*+?|&=\`)
-	urlEnabledChars      = regexp.QuoteMeta(`:?&=`)
+	urlEnabledChars      = regexp.QuoteMeta(`,:?&=`)
 )
 
 // IsValidRegex checks if the tested string can be used as a regex, but without any weird character.
@@ -79,6 +79,8 @@ var (
 	// URLWithNginxVariableRegex defines a url that can contain nginx variables.
 	// It is a risky operation
 	URLWithNginxVariableRegex = regexp.MustCompile("^[" + extendedAlphaNumeric + urlEnabledChars + "$]*$")
+	// MaliciousRegex defines chars that are known to inject RCE
+	MaliciousRegex = regexp.MustCompile(`\r|\n`)
 )
 
 // ValidateArrayOfServerName validates if all fields on a Server name annotation are
@@ -113,6 +115,10 @@ func ValidateRegex(regex *regexp.Regexp, removeSpace bool) AnnotationValidator {
 		if !regex.MatchString(s) {
 			return fmt.Errorf("value %s is invalid", s)
 		}
+		if MaliciousRegex.MatchString(s) {
+			return fmt.Errorf("value %s contains malicious string", s)
+		}
+
 		return nil
 	}
 }
