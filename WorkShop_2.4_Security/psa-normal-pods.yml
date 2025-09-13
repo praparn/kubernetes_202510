@@ -29,5 +29,3 @@ spec:
       ports:
         - containerPort: 22
           protocol: TCP
-  imagePullSecrets:
-    - name: secpullhubdocker

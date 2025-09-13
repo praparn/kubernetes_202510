@@ -30,8 +30,6 @@ spec:
       volumeMounts:
       - mountPath: /temp
         name: voldocker
-  imagePullSecrets:
-    - name: secpullhubdocker
   volumes:
     - name: voldocker
       hostPath:
