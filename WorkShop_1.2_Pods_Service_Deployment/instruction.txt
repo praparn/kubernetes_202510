@@ -3,18 +3,10 @@ Instruction for Workshop 1.2 Pods_Service_Deployment:
 Part 1: Create basic Pods for single container:
 This workshop will create web Pods and simple map to outside
 ====================================================
-#####################################Image pull secret##################################
-
-1. Create secret for pull image on "hub.docker.com" via command line
-	kubectl create secret docker-registry secpullhubdocker --docker-server=https://index.docker.io/v1/ --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email>
-
-2. Check secret list by command:
-    kubectl get secret 
-
-########################################################################################
 
 1. Get command prompt for access folder workshop 1.2 by command :cd /xxxx/WorkShop_1.2_Pods_Service_Deployment/singlecontainer
-2. Check file on workshop
+2. Enble KYAML by command: 
+    export KUBECTL_KYAML=true
 
 3. Create Pods and check Pods state (Expect: Running) by command:
 	kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/singlecontainer/webtest_pod.yml
