@@ -35,10 +35,26 @@ This workshop will create web Pods and simple map to outside
 7. Check log from Pods by command:
 	kubectl logs webtest -c webtest
 
-8. Clear environment by delete Pods and service by command:
+8. Delete Pods and service by command:
 	kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/singlecontainer/webtest_pod.yml
 	kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/singlecontainer/webtest_svc.yml
 
+9. Recreate Pods and service with KYAML by command:
+	kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/singlecontainer/webtest_pod-kyaml.yaml
+	kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/singlecontainer/webtest_svc-kyaml.yaml
+
+10. Check pods and service status by command:
+    kubectl get pods
+	kubectl get svc
+
+11. Test curl and web browser for access web by command:
+	curl http://<Private IP>:<port>
+	Open browser: http://<Public IP>:<port>
+
+12. Delete Pods and service with KYAML by command:
+	kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/singlecontainer/webtest_pod-kyaml.yaml
+	kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/singlecontainer/webtest_svc-kyaml.yaml
+	
 ====================================================
 Part 2: Create multiple
 This workshop will create Pods with multiple container
