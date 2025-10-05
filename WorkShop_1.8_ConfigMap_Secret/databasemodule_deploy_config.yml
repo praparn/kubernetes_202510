@@ -66,5 +66,3 @@ spec:
                 secretKeyRef:
                   name: databasemodule-secret
                   key: password
-      imagePullSecrets:
-        - name: secpullhubdocker

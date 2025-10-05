@@ -54,7 +54,7 @@ This workshop will create web Pods and simple map to outside
 12. Delete Pods and service with KYAML by command:
 	kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/singlecontainer/webtest_pod-kyaml.yaml
 	kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/singlecontainer/webtest_svc-kyaml.yaml
-	
+
 ====================================================
 Part 2: Create multiple
 This workshop will create Pods with multiple container
@@ -122,8 +122,14 @@ This workshop will create Pods with multiple container
 
 14. Test get webpage by command: curl http://$Server_IP:$Server_Port/
 
-15. Remove Pods and Service for Cleanup by command:
-		kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/multicontainer/webmodule_pod2.yml
+15. Delete web2 and recreate with KYAML by command:
+        kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/multicontainer/webmodule_pod2.yml
+		kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/multicontainer/webmodule_pod2-kyaml.yaml
+
+16. Test get webpage by command: curl http://$Server_IP:$Server_Port/
+
+17. Remove Pods and Service for Cleanup by command:
+		kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/multicontainer/webmodule_pod2-kyaml.yaml
 		kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/multicontainer/webmodule_svc.yml
 		kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/multicontainer/databasemodule_pod.yml
 		kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.2_Pods_Service_Deployment/multicontainer/databasemodule_svc.yml

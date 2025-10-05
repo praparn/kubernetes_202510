@@ -10,16 +10,6 @@ Part1: Container level configuration:
 3. Create Namespace by command:
 	kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.8_ConfigMap_Secret/webmicroservice_namespace.yml
 
-#####################################Image pull secret##################################
-
-1. Create secret for pull image on "hub.docker.com" via command line
-    kubectl create secret docker-registry secpullhubdocker --docker-server=https://index.docker.io/v1/ --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email> --namespace=webmicroservice
-
-2. Check secret list by command:
-    kubectl get secret --namespace=webmicroservice
-
-########################################################################################
-
 4. Create ConfigMap by command:
 	kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.8_ConfigMap_Secret/webmodule_configmap.yml
 	kubectl get configmap -n webmicroservice
