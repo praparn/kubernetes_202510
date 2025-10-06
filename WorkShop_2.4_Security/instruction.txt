@@ -3,22 +3,8 @@ Note: This instruction will start lab for kubernetes's cluster for real workshop
 ============================================================================================================================================================
 Part 1: Network Policy
 ============================================================================================================================================================
-0. Create Namespace and Secret pull image:
+0.1 Create Namespace:
   kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_2.4_Security/namespace.yml
-
-#####################################Image pull secret##################################
-
-0.1 Create secret for pull image on "hub.docker.com" via command line
-kubectl create secret docker-registry secpullhubdocker --docker-server=https://index.docker.io/v1/ --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email> --namespace=management-ui
-
-kubectl create secret docker-registry secpullhubdocker --docker-server=https://index.docker.io/v1/ --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email> --namespace=stars
-
-kubectl create secret docker-registry secpullhubdocker --docker-server=https://index.docker.io/v1/ --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email> --namespace=client
-
-0.2 Check secret list by command:
-    kubectl get secret --namespace=management-ui
-    kubectl get secret --namespace=stars
-    kubectl get secret --namespace=client
 
 ########################################################################################
 
@@ -76,15 +62,6 @@ Part 2: Access Control Policy (User Account)
 
 1. Create namespace "security" and deploy application via command:
 	kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_2.4_Security/security-namespace.yml
-#####################################Image pull secret##################################
-
-  1.1 Create secret for pull image on "hub.docker.com" via command line
-kubectl create secret docker-registry secpullhubdocker --docker-server=https://index.docker.io/v1/ --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email> --namespace=security
-
-  1.2 Check secret list by command:
-    kubectl get secret --namespace=security
-
-########################################################################################
 	kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_2.4_Security/security-pod.yml
 	kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_2.4_Security/security-svc.yml
 	kubectl get pod,svc -n=security
@@ -164,17 +141,6 @@ Part 4: Pods Security Association (PSA)
 ============================================================================================================================================================
 1. Create Namespace with enforce PSA by command:
 kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_2.4_Security/psa-namespace.yml
-
-#####################################Image pull secret##################################
-
-1.1 Create secret for pull image on "hub.docker.com" via command line
-kubectl create secret docker-registry secpullhubdocker --docker-server=https://index.docker.io/v1/ --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email> --namespace=namespace-psa
-
-
-1.2 Check secret list by command:
-    kubectl get secret --namespace=namespace-psa
-
-########################################################################################
 
 2. Check detail of namespace by command:
 kubectl describe namespace/namespace-psa
