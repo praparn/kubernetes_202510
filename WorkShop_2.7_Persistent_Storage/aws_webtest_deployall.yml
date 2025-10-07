@@ -36,8 +36,6 @@ spec:
           volumeMounts:
           - name: aws-share-pvc
             mountPath: /usr/src/app
-      imagePullSecrets:
-        - name: secpullhubdocker
       initContainers:
         - name: download
           image: labdocker/alpineweb:latest
