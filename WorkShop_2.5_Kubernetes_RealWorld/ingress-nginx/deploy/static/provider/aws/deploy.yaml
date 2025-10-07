@@ -320,7 +320,9 @@ subjects:
   namespace: ingress-nginx
 ---
 apiVersion: v1
-data: null
+data:
+  allow-snippet-annotations: "true"
+  proxy-body-size: 50m
 kind: ConfigMap
 metadata:
   labels:

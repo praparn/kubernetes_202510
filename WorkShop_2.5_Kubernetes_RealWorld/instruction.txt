@@ -80,13 +80,12 @@ tmux new -s Lab
 	# Remark: For your co-worker please kindly ssh to target node and join session with command #
 		tmux attach-session -t Lab
 
-3. *Optional* (all node) Check hostname for each node and record by command:
-	curl http://169.254.169.254/latest/meta-data/local-hostname
+3. *Optional* (all node) Check hostname for each node and record on sheet:
 
 4. (Master) Prepare configuration for initial kubernetes master
     (run export environment)
 	cd ~
-	curl https://raw.githubusercontent.com/praparn/sourcesetup/master/kubernetes_initial/version132/kubeadm-init.yaml > ~/kubeadm-init.yaml
+	curl https://raw.githubusercontent.com/praparn/sourcesetup/master/kubernetes_initial/version134/kubeadm-init.yaml > ~/kubeadm-init.yaml
   	sed -i -e "s/2.2.2.2/$HostnameMaster1/g" ~/kubeadm-init.yaml
   	sed -i -e "s/hostnamemaster/$HostnameMaster1/g" ~/kubeadm-init.yaml
   	sed -i -e "s/KubernetesClusterName/$ClusterName/g" ~/kubeadm-init.yaml
@@ -198,7 +197,7 @@ eyJhbGciOiJSUzI1NiIsImtpZCI6IkZrTkFjN296TUxsbmFfZmU0MklfLVdUdnRjQXFyMWJ1TzFLbWRD
 14. (Worker1) Prepare configuration for initial kubernetes worker:
 (run export environment)
 cd ~
-curl https://raw.githubusercontent.com/praparn/sourcesetup/master/kubernetes_initial/version132/kubeadm-join-worker.yaml > ~/kubeadm-join-worker.yaml
+curl https://raw.githubusercontent.com/praparn/sourcesetup/master/kubernetes_initial/version134/kubeadm-join-worker.yaml > ~/kubeadm-join-worker.yaml
 sed -i -e "s/hostnamelb/$HostnameMaster1/g" ~/kubeadm-join-worker.yaml
 sed -i -e "s/token: tokenid/token: $tokenid/g" ~/kubeadm-join-worker.yaml
 sed -i -e "s/sha256:cahash/$cacerhash/g" ~/kubeadm-join-worker.yaml
@@ -214,7 +213,7 @@ htop
 16. (Worker2) Prepare configuration for initial kubernetes worker:
 (run export environment)
 cd ~
-curl https://raw.githubusercontent.com/praparn/sourcesetup/master/kubernetes_initial/version132/kubeadm-join-worker.yaml > ~/kubeadm-join-worker.yaml
+curl https://raw.githubusercontent.com/praparn/sourcesetup/master/kubernetes_initial/version134/kubeadm-join-worker.yaml > ~/kubeadm-join-worker.yaml
 sed -i -e "s/hostnamelb/$HostnameMaster1/g" ~/kubeadm-join-worker.yaml
 sed -i -e "s/token: tokenid/token: $tokenid/g" ~/kubeadm-join-worker.yaml
 sed -i -e "s/sha256:cahash/$cacerhash/g" ~/kubeadm-join-worker.yaml
@@ -302,7 +301,7 @@ kubectl get pods -o wide
 
 24. (Master) Expose web outside:
 kubectl expose pods webtest --target-port=443 --type=NodePort
-kubectl get svc -o wide                                               ==> Record Public Port
+kubectl get svc -o wide                                           ==> Record Public Port
 
 25. (Master) Test get web outside:
 curl https://$HostnameMaster1:xxxx -k
@@ -360,15 +359,6 @@ ingress-nginx-controller-admission   ClusterIP      10.97.28.203   <none>       
 
 
 28. (Master) Test deploy ingress service
-#####################################Image pull secret##################################
-
-  28.1 Create secret for pull image on "hub.docker.com" via command line
-kubectl create secret docker-registry secpullhubdocker --docker-server=https://index.docker.io/v1/ --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email>
-
-  28.2 Check secret list by command:
-    kubectl get secret 
-
-########################################################################################
 # Create Service/Pods/Deployment for webtest1 and webtest2 by command:
 	kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_2.3_Ingress_Network/webtest_deploy.yml
 	kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_2.3_Ingress_Network/webtest_deploy2.yml
