@@ -69,5 +69,4 @@ Part1: Container level configuration:
 14. Cleanup lab by command:
 	kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.8_ConfigMap_Secret/webmodule_deploy_config.yml
 	kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.8_ConfigMap_Secret/databasemodule_deploy_config.yml
-	kubectl delete secret/secpullhubdocker -n=webmicroservice
 	kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_1.8_ConfigMap_Secret/webmicroservice_namespace.yml
