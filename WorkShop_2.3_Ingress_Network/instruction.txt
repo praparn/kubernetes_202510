@@ -170,7 +170,7 @@ Kong Gateway API Deployment
     kubectl apply -f https://raw.githubusercontent.com/praparn/kubernetes_202510/master/WorkShop_2.3_Ingress_Network/Kong/kong-route2.yml
 	kubectl get httproute
 	kubectl describe httproute/webtest1-httproute
-	kubectl describe httproute/webtest1-httproute
+	kubectl describe httproute/webtest2-httproute
 
 15. Test access website by browser:
 	http://webtest1.kuberneteslabthailand.com:30150
